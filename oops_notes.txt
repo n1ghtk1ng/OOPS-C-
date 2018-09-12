@@ -1,0 +1,409 @@
+1. the only difference between struct and class in c++ is that in class by default the members are private, in structure by default they  are public.
+2. in c struct , there is no private, public, no concept of oops implemented
+3. when we define a function of class inside it, then it is by default inline , but if we define outside the class , then they are by default not inline, they are made inline by decalring them with keyword inline inside the class and defining it outside the class.
+4. class is a description of object, object is an instance of the class.
+
+static local variable--> default initialized to zero, their lifetime is throughout the program(i.e. variable ki memory destroy tab hogi jab program end hoga), scope is local
+
+static member variable--> 
+1.declared inside the class body.
+2.also called class member variable
+3. must be defined outside the class.
+4. does not belong to the object but to the whole class.
+5.there will be only one copy of static member for the whole class.
+6. any object can use the same copy of the class variable.
+7. they can also be used with he class name.
+
+if declared private, then also can be defined outside the class.
+
+e.g. private:
+	int balance; // instance member variable
+	static int roi // static member variable // here the variable is just declared in the memory, but not allocated memory till now, to allocate memory to it, define it outside the class.
+
+static member variable ki memory cobject pe depend nhi karti
+
+if static class variable is declared private we can`t access it from outside class using class name and sro, we need to use a member function and if we want to initialize a private static variable without constructing the object, use static member function--> can access only static data members and can be called without creatinh the object(using class name)
+
+9. constructor is a member function of the class, it must be an instance member function hence it can never be static.
+
+constructor is used to solve the problem of initialization. i.e. if we create a car object, then it contains garbage value, but we can`t say that this object is representing the car itself(since object has garbage value), if now we call shiftgare function, then in garbage value only, that gear is incremented which is wrong.
+
+while calling the constructor (it can also be written as)-->
+Complex c1=Complex(3,4); // or Complex c1(3,4);
+
+if single argument is passed in the constructor --> Complex c1=5 --> interpret as Complex c1(5);
+Complex c1=c; --> interpert as Complex c1(c);
+
+10. Destructor is an instance member function of class.
+	the name of the destructor is same as that of the class but preceded by ~ sign.
+11. Destructors can never be static
+12. Destructors can have no arguments(No overloading is possible)
+13. Destructors is invoked implicitly when object is going to destroy
+
+destructor does not destroys the object, destructor object ki lifecycle mein chalne wala aakhri function hota hai.
+and hence jo bhi memory allocate ki hai using new keyword can be deallocated here. 
+(the pointer to the allocated memory is destroyed with the detruction of the object but the memory is not freed and hence here destructor comes into picture)
+
+14. operator overloading -->
+Complex operator+(Complex c){
+	Complex temp;
+	temp.a=a+c.a;
+	temp.b=a+c.b;
+	return temp;
+}
+c3=c1.operator+(c2);  --> can be written as c3=c1+c2
+C1=-c1  --> can be written as c1.operator-();
+It is a way to implement compile time polymorphism 
+we can`t overload sizeof and ?: operator
+
+
+in binary operand, left wala object hi caller object hota hai.
+
+post-increment: i2=i1++; --> i1.operator++();
+
+pre-increment --> Integer operator++(){Interger i; i.x=++x; return (i);}
+post-increment --> Integer operator++(int){Interger i; i.x=++x; return (i);}  // to differentiate between pre and post increment (if both are defined in the class)    (same with decrement operator)
+
+
+15. Friend function --> not a member function of the class to whch it is a friend, declared in the class with friend keyword, defined outside the class to which it is friend.
+It can access any member of the class to which it is a friend. It can`t access the members of the class directly but with the help of objects.
+It has no caller object, It is not defined outside the class with membership label;
+
+advantages of friend function-->
+1. friend function can become friend to more than one class (hence we can access the private data members of more than one class);
+2. overlloading of operators as a friend function.
+3. overloading of insertion and extraction operator.
+
+cin>>c1 --> cin.operator>>(c1);
+
+for overloading >> operator, we only need to define the friend function for complex class since we need to access the private members of complex class only.
+
+after using friend function 
+cin>>c1 === operator>>(cin,c1); where operator >> is a friend function
+
+we return by reference through friend function since we can`t make the object of ostream class, hence use the reference only
+
+16. member function of one class can become friend to other class.
+
+class A{
+	public:
+		void fun(){...}
+		void foo(){...}
+}
+class B{
+	public:
+		friend void A::fun();
+		friend void B::fun();
+}
+
+class B{
+	public:
+		friend class A;  --> creates all the functions incside A as friends funtion to class B
+}
+
+17. Inheritance--> 
+class is used to decsribe the prperties and the behaviour of the object.
+e.g. car class--> car has properties like price, engine, colour,capacity and methods like getprice(),setprice(), ....
+
+now if we want to represent a sportscar-- it has properties of car + some of its own additional properties like alarm(which buzzes when fuel is about to finish),navigator etc.,
+it will have all the methods of car class + its own additional methods
+
+now to represent a sports car we have 3 options
+option 1-->  to write the additional properties in the car class itself , but then we won`t be able to make object of simple car(which is not sports car)
+option 2--> create a different class for sports car --> will work but we have to rework, incfeases the cost and time of the project.
+option 3-->create a new class with those properties of sports car which are not in car class; --> now to represent a sports car, we have to create 2 objects, which is against the rule of inheritance.
+option 4-->inheritance --> create a new class with those properties of sports car which are not in car class and link the sportscar class with the car class;
+
+encapsulation--> ek entity se related saari information ek hi object mein rakhna. 
+
+
+Inheritance --> it is a process of inheriting properties and behaviours of existing class into new class.
+
+multilevel inheritance--> furniture--> dining table--> round dining table
+multiple inheritance--> 2 parent , one child
+heirarchical inheritance--> 1 parent , 2 child
+
+visibility mode--> private, protected, public
+users of a class->user1--> one who creates the object of our class, 
+		 user2-->second who uses our class as child class
+
+availability vs accessibility -> 
+agar koi meri class ka object bnata hai, to uss object mein saare members (((available))) hai jo maine apni class me bnaye hai . private members ko bhi memory milegi jab koi meri class ka object bnayga.
+accessibilty alag issue hai, object hmare private members ko access nhi kar pata bhale hi vo available ho. 
+
+private, public, protected, teeno tarah k variables available hote hai object mein, accesible sirf public wale hote hai.
+
+when we make a variable private, we make sure that the variable is available to both user1 and user2, but accesible to neither user1, nor user2
+when we make a variable protected, we make sure that the variable is available to both user1 and user2, but accesible not to user1, only to user2 i.e. child class can access it
+when we make a variable protected, we make sure that the variable is available to both user1 and user2,  accesible both to user1, and to user2 i.e. child class can access it, obj of parent class can access it as well
+
+
+class B: A --> if nothing mentioned before A implies-> private visibility mode
+
+Acessibility-->	
+if visibilty mode is public--> protected of A become protected of B, pubic of A become public of B.
+if visibilty mode is protected--> protected of A become protected of B, pubic of A become protected of B.
+if visibilty mode is private--> protected of A become private of B, pubic of A become  private of B. 
+
+so visibilty mode help in deciding what variables of class A inherited by class B can be accesed by the users of class B
+
+is-a-relationship( inheritance is used) --> Banana is a fruit, sportcar is a car,  --> fruit->parent, Banana->child class
+has-a-relationship(inheritance is not used)--> car has engine
+
+is-a-relationship is always implemeted as a public inheritance
+
+class array{
+	private:
+		int a[10];
+	public:
+		void insert(int index,int value){ a[index]=value;}
+};
+
+class stack: public array{
+	private:
+		int top;
+	public:
+		void push(int value){ insert(top,value);}
+};
+
+here if we use public inheritance then someone can use insert function of array class directly and will nullify the stack property itself, so here private inheritance can be used.
+
+17. child class ka constructor hi parent class k constructor ko call karta hai.
+inheritance mein constructor k chalne ka order from parent to child hota hai.
+
+if we dont call the parent constructor from the child constructor, then compiler will itself add the parent default constructor call
+if we dont have a parent default constructor and we are not writing the call for parent constructor inside child constructor, then error will come.
+
+inheritance mein desstructor k chalne ka order from child to parent hota hai. 
+
+in both constructor and destructor, the call is made from childclass to parent class, but
+
+in constructor, first parent class constructor executes then child class.
+in destructor, first child class destructor executes, then parent class.
+
+if we dont call parent destrcutor, then compiler automatically calls parent destrcuo
+
+18. this pointer-->
+this is a local object pointer in every instance member function(not static member function) conatinaing address of the caller object.
+this pointer cannot be modified.
+it is used to refer caller object in member function.
+
+19. static memory allocation--> done using declaration statements.
+
+declaration statements dekhke compiler compile time pe hi decide kar leta hai ki kitne variables, objects  banege , aur jab program run hoga, un variables aur objects ko utni hi memory milegi jitni compile time pe decide hui thi. and during runtime we cant expant or contract this allocated memory
+compile time allocation mein bas decode ho jata hai ki kitni memory deni hai, memory to jab program run hota hai tbhi milti hai.
+
+aur static memory allocation mein variables ki lifetime jitni hai utni rahegi, ham usme badlav nhi kar skte i.e. jab vo variable destroy hoga(after going out of scope) , naa to ham usse pehle aur na hi uske baad memory deallocate karva skte hai.
+
+dynamic memory allocation--> using new and delete keyword
+rutime pe decide hoga ki kitni memory deni hai
+variables ki lifetime troughout the program rheti hai ,and can be shortened using delete keyword.
+
+delete p--> deallocate the memory pointed by p;
+
+
+20. methos overriding-->
+
+class A{
+	public:
+		void f1(){}
+		void f2(){}
+};
+
+class B:public A{
+	public:
+		void f1(){}  // method overriding 
+		void f2(int a){} // method hiding
+};
+
+B b;
+b.f1() --> calls class B f1() as early binding occurs(compilr sees the type of object or pointer which calls the method)
+b.f2() --> error , here compiler doesn`t go to parent class 
+b.f2(1) --> f2() function of class B
+
+so if one version of function is in parent and other in child, then it is not function overloading
+so for function overloading , all the versions of function should be in the same class itself.
+
+e.g. of function overriding-->
+car{
+shiftgear(){}
+}
+sportscar{
+shiftgear(){}  // sportscar mein gear change karne ka mechanism car class se alag hai, in this case we need function overriding (if we make a separate name function for gearchange functionality , the shiftgear function of car class can still be called )
+
+}
+
+20) virtual function-->
+Base class pointer can point to the object of any of its descendant class.
+but converse is not true;
+
+to make sure of late binding or runtime binding we use virtual keyword.
+if we make a function virtual in base class, then we dont need to write virtual in front of the ame overrided function(same prototype) in child class, it is assumed to be virtual by default
+
+jis bhi class mein agar ek bhi virtual function mila ,to compiler us class mein as a member ek *_vptr naam ka variable declare kar dega, for its child class, it is not created separately, instead *_vptr is inherited by child class.
+compiler also creates a static array(vtable) --> array of pointer to the functions
+
+jis bhi class mein virtual function hai uske liye vtable banegi, uske childs k liye alag alag vtable banegi 
+
+vptr conatins the address of vtable of corresponding class 
+vptr conatins address of the virtual functions of corresponding class.
+
+21) A do nothing function is called a pure virtual function.
+void fun()=0; // is function ki definition na to class k ander hogi na hi bahar
+
+we can`t create an object of abstract class;
+
+if we create a child class of abstract class, it is necessary to give defiition of the pure virtual function i.e. override it. otherwise we will be calling the do nothing function using the object of derived class or we can again declare the same function prototype as pure virtual function (and we can`t use the child class now, create a further child to this class and so on.).
+
+now if we have a function in abstract class which is not pure virtual function, then to use it we need to have a child class, to use it since we cant create the object of abstract class
+
+since we can use base class pointer and point it to derived class object and due to early binding , do nothing function will be called, to avoid this we make the do nothing function virtual.
+
+class which conatains at least one pure virtual function.
+
+e.g. of abstract class-->
+person, student and faculty class
+
+here in this system, we create person class as abstract class, since we dont need to create a person object, we create objects for either faculty or student
+
+22) virtual destructor-->
+class A{};
+class B:public A{};
+
+A *x=new B();
+
+delete x;  --> here due to early binding only parent destructor is called, to invoke the child detrcutor we make parent class destructor virtual (( virtual~A(){} )) and after child class destructor is done execution, it calls the parent destructor.
+ 
+
+23) nested class-->
+
+A nested class is a member and has same access rights as any other member.
+the members of enclosing class have no special access  to members of a nested class,the usual access rulesshall be obeyed.
+
+e.g. of nested class--> student name, rollno, marks,  address--> (state,city,pincode)   
+
+address class k private members ko sirf address class k member functions hi use kr skte hai, not by student class member functions
+
+we can`t make the object of address class in main function if we have address class in private area of stident class;
+if we have address class as public member, then to make its object in main(), we write student::address a;
+
+24)private constructor-->
+
+in public , create static member function 
+static Admin*getInstance(){
+	Admin *ptr=new Admin;  // we dynamically createthe object as the normal object is destroyed once the function completes 
+	return ptr;  // above statement calls the constructor which in private section of the class
+}
+
+in main()-->
+{
+	adminPointer=Admin:: getinstance();
+}
+
+now if we want that admin class ka ek hi object bane then-->
+create a private static variable admincnt, initialize to 0(outside class);
+now inside getInstance put if condition (we can use admincnt in getInstance since it is a static variable)
+
+this is the concept of singleton class;
+
+25) Initialization list--> 
+const variable and reference variables need to be initialized as soon as they are declared., and this can`t be done in constructor, so we use initialization list for such things
+
+26) Shallow copy-->
+creating copy of object by copying data of all member variables as it is.
+
+deep copy-->
+creating object by copying data of another object along with the values of memory resources resides outside the object but handled by that object.
+
+27) exception handling-->
+exception is any abnormal behaviour, runtime error.
+
+program statements that you want to monitor for exceptionsare contained in a try block .
+if any exception occurs within the try block,it is thrown.
+the exception is caught using catch and processed.
+
+syntax-->
+try{
+}
+catch (type 1 arg){}
+catch (type 2 arg){}
+catch (type 3 arg){}
+
+// we need to put catch statements just after try block otherwise error.
+// 2 catch blocks k bich mein koi code nhi aana chahiye else error.
+// throw statement ham try mein hi likhte hai, ek baari throw chal gya, phir try ki baaki statements nhi chalti.
+// if we throw and there is no catch block corresponding to it then error
+// catch statement if written without any try block --> still error
+
+// so if try likha hai --> catch bhi likhna hoga; catch likha hai to try bhi likhna hoga
+// sirf throw likha hai without try or catch --> works --> throw is independent of try and catch
+
+// if we write throw(10) and since there is no catch function defined --> c++ default catch function is called and runned and we get runtime error in this case,
+// so if we don`t define a catch we has same data type as throw i.e. not same prototype --> we get runtime error
+
+// ek baar agar ek catch chal gaya to baaki catch ko dekhenge hi nahi.
+// catch(...){}  // catches anything
+
+// if we write throw; then again runtime error , since we don`t have a catch corresponding to it.
+
+// throw can also be written in a function and that function can be called in a try block.
+
+// we can do something like this-->
+catch(int){}  // will catch the intteger thrown but won`t be able to use it.
+
+30)
+Namespaces--> Namespace is a container for identifiers
+header files contains the declarations of the identifiers like printf,scanf,etc.
+library files contains the definitions of the identifiers like printf,scanf,etc.
+
+header files are included so that compiler can see the declarions of the identifiers that are used. 
+
+nowadys we use namespace that contains the declarations of the identfiers used (group of declarations) and that namespace is kept in the header files
+
+namespace xyz{ 
+
+} 
+
+by using namespace , if we have 2 header files each with a namespace containing x,  then also they can be included in same program without any problem.
+if we don`t use namespace, then 2 same variables declared in 2 separate files and their inclusion in a new file creates ambiguity.
+
+namespace puts name of its members in a distinct space so that they don`t conflict with the names in other namespaces or global namespace
+
+
+alias of namespace --> namespace qw=xyx;
+
+the namespace definition must be done at global scope or nested inside another namespace (so namespace can`t be inside main function)
+
+we can`t create an instance of namespace
+there can be unnamed namespaces too.
+
+if one header file has one namespace and other headerfile has namespace with same name, and these files are included in our program , then if compiler combines them into one namespace with combined declarions of both of them
+
+part2)
+namespace myspace{
+	int a;
+	void f1();
+	class A{
+		public:
+			void fun();
+	};
+}
+void myspace::A::fun(){
+	cout<<"hello"<<endl;
+}
+
+int main(){
+	myspace::a=5;  // using nameof namespace and :: operator only we can assign value to variables inside a namespace	
+}
+
+cout is also a predefined object whose declaration is in "std" namespace which is present in iostream file
+
+iostream is different from iostream.h, in iostream file, there is std namespace which contains declaration of cin,cout
+now after including iostream file, we can use std::cout, std::cin,
+
+or if we write using namespace std;
+now without using std::, we can use cin,cout;
+
+but if 2 namespace have same name of identifiers, then we need to use sro and the name of namespace
+
+similarly after declaring myspace namespace, we can write using namespace myspace; and use its identifiers without sro. but we need to define the functions using sro only to distinguish between normal functions
